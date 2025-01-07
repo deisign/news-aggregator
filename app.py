@@ -25,6 +25,7 @@ rss_feeds = [
     # Калмыкия
     
     'https://kalmykia-news.net/rss/news',
+    'https://elista.bezformata.com/rsstop.xml',
     'https://vesti-kalmykia.ru/feed/rss/news?format=feed',
     'http://halmgynn.ru/rss.xml',  # Новый источник
     # Ингушетия
