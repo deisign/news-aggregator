@@ -1,6 +1,7 @@
 import streamlit as st
 import feedparser
-from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 # --- Функция для получения новостей из RSS ---
 def fetch_rss_news(rss_feeds):
@@ -20,6 +21,26 @@ def fetch_rss_news(rss_feeds):
             st.sidebar.warning(f"⚠️ {feed_url} - Нет данных")
     return news_list
 
+# --- Функция для получения данных из Telegram-каналов через веб-скрейпинг ---
+def fetch_telegram_messages(channels):
+    messages = []
+    for channel_url in channels:
+        try:
+            response = requests.get(channel_url)
+            response.raise_for_status()  # Проверяем, что запрос успешен
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Извлекаем сообщения из HTML
+            message_blocks = soup.find_all('div', class_='tgme_widget_message_text')
+            for msg in message_blocks[:10]:  # Ограничиваемся первыми 10 сообщениями
+                messages.append({
+                    "channel": channel_url,
+                    "text": msg.text.strip()
+                })
+        except Exception as e:
+            st.sidebar.error(f"Ошибка при обработке {channel_url}: {e}")
+    return messages
+
 # --- Списки источников ---
 rss_feeds = [
     # Калмыкия
@@ -33,23 +54,12 @@ rss_feeds = [
 ]
 
 telegram_channels = [
-    # Калмыкия
-    'https://t.me/kalmyk_broadcast',
-    'https://t.me/riakalm',
-    'https://t.me/kalmykiya_news',
-    'https://t.me/elistacity',
-    'https://t.me/boombakalmykia',
-    'https://t.me/vesti_kalmykia',
-    'https://t.me/insider_kalmykia',
-    'https://t.me/kalmykia_online',
-    'https://t.me/slukhach_kalmykia',
-    'https://t.me/elistapano',
-    # Ингушетия
-    'https://t.me/ingushetiya_daily',
-    'https://t.me/themagastimes',
-    'https://t.me/fortangaorg',
-    'https://t.me/news_ingushetii',
-    'https://t.me/ingushetiya_today',
+    'https://t.me/s/kalmyk_broadcast',
+    'https://t.me/s/riakalm',
+    'https://t.me/s/kalmykiya_news',
+    'https://t.me/s/ingushetiya_daily',
+    'https://t.me/s/themagastimes',
+    'https://t.me/s/fortangaorg'
 ]
 
 # --- Заголовок приложения ---
@@ -58,41 +68,48 @@ st.sidebar.header("Фильтры")
 
 # --- Получение и отображение новостей из RSS ---
 st.sidebar.subheader("Статус лент:")
-news = fetch_rss_news(rss_feeds)
+rss_news = fetch_rss_news(rss_feeds)
 
-# Фильтрация по источнику
-sources = list(set([n['source'] for n in news]))
+# --- Получение и отображение новостей из Telegram ---
+st.sidebar.subheader("Telegram-каналы")
+telegram_news = fetch_telegram_messages(telegram_channels)
+
+# --- Фильтрация по источникам и ключевым словам ---
+sources = list(set([n['source'] for n in rss_news]))
 selected_sources = st.sidebar.multiselect(
     "Выберите источники (RSS)", options=sources, default=sources
 )
-
-# Фильтрация по ключевым словам
 keywords = st.sidebar.text_input("Фильтр по ключевым словам", "")
 
-# Применение фильтров
-filtered_news = [
-    n for n in news
+filtered_rss_news = [
+    n for n in rss_news
     if n['source'] in selected_sources and (keywords.lower() in n['title'].lower() or keywords == "")
 ]
 
+filtered_telegram_news = [
+    n for n in telegram_news
+    if keywords.lower() in n['text'].lower() or keywords == ""
+]
+
 # --- Вывод новостей из RSS ---
-st.subheader(f"Найдено новостей (RSS): {len(filtered_news)}")
-for item in filtered_news:
+st.subheader(f"Найдено новостей (RSS): {len(filtered_rss_news)}")
+for item in filtered_rss_news:
     st.markdown(f"### [{item['title']}]({item['link']})")
     st.markdown(f"*Источник:* {item['source']}")
     st.markdown(f"*Дата публикации:* {item['published']}")
     st.write("---")
 
-# --- Вывод Telegram-каналов ---
-st.subheader("Telegram-каналы")
-st.write("Ниже представлены ссылки на Telegram-каналы Калмыкии и Ингушетии. Для просмотра содержимого перейдите по ссылке:")
-for channel in telegram_channels:
-    st.markdown(f"- [Перейти в Telegram]({channel})")
+# --- Вывод новостей из Telegram ---
+st.subheader(f"Найдено новостей (Telegram): {len(filtered_telegram_news)}")
+for item in filtered_telegram_news:
+    st.markdown(f"**Канал:** [{item['channel']}]({item['channel']})")
+    st.markdown(f"**Сообщение:** {item['text']}")
+    st.write("---")
 
 # --- Информация о приложении ---
 st.sidebar.info(
     """
     Это приложение создано для агрегирования новостей из регионов Калмыкия и Ингушетия.
-    Источники: RSS-ленты и Telegram-каналы.
+    Источники: RSS-ленты и Telegram-каналы через веб-скрейпинг.
     """
 )
