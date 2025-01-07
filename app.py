@@ -54,9 +54,19 @@ rss_feeds = [
 ]
 
 telegram_channels = [
-    'https://t.me/s/kalmyk_broadcast',
+    'https://t.me/kalmnovosti',
+    'https://t.me/elistaorg',
     'https://t.me/s/riakalm',
     'https://t.me/s/kalmykiya_news',
+    'https://t.me/gorodelista1',
+    'https://t.me/governmentkalmykia08',
+    'https://t.me/OkElista',
+    'https://t.me/kalmykia08',
+    'https://t.me/Fond_ZO_Kalmykia',
+    'https://t.me/cphelista',
+    'https://t.me/adm_ket',
+
+    
     'https://t.me/s/ingushetiya_daily',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
