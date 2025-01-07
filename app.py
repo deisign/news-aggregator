@@ -65,8 +65,19 @@ telegram_channels = [
     'https://t.me/Fond_ZO_Kalmykia',
     'https://t.me/cphelista',
     'https://t.me/adm_ket',
-
-    
+    'https://t.me/infokalmykiya',
+    'https://t.me/molodezhy08',
+    'https://t.me/kalmstat',
+    'https://t.me/PozornayaDoskaElista',
+    'https://t.me/sluhi_08',
+    'https://t.me/insider08',
+    'https://t.me/mcrrk',
+    'https://t.me/mypervie08',
+    'https://t.me/KhurulKalmykia',
+    'https://t.me/elstvibe',
+    'https://t.me/elistaonline',
+    'https://t.me/kalmykia_08_rk',
+    'https://t.me/vesti_kalmykia',
     'https://t.me/s/ingushetiya_daily',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
