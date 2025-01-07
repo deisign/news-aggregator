@@ -23,11 +23,10 @@ def fetch_rss_news(rss_feeds):
 # --- Списки источников ---
 rss_feeds = [
     # Калмыкия
-    
     'https://kalmykia-news.net/rss/news',
     'https://elista.bezformata.com/rsstop.xml',
     'https://vesti-kalmykia.ru/feed/rss/news?format=feed',
-    'http://halmgynn.ru/rss.xml',  # Новый источник
+    'http://halmgynn.ru/rss.xml',
     # Ингушетия
     'https://fortanga.org/feed',
     'https://magastimes.ru/feed',
@@ -46,10 +45,11 @@ telegram_channels = [
     'https://t.me/slukhach_kalmykia',
     'https://t.me/elistapano',
     # Ингушетия
-    'https://t.me/ingushetia_official',
     'https://t.me/ingushetiya_daily',
-    'https://t.me/ingushsegodnya',
-    'https://t.me/ingushetiatg',
+    'https://t.me/themagastimes',
+    'https://t.me/fortangaorg',
+    'https://t.me/news_ingushetii',
+    'https://t.me/ingushetiya_today',
 ]
 
 # --- Заголовок приложения ---
