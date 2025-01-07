@@ -78,6 +78,7 @@ telegram_channels = [
     'https://t.me/elistaonline',
     'https://t.me/kalmykia_08_rk',
     'https://t.me/vesti_kalmykia',
+    'https://t.me/bumba_bumba',
     'https://t.me/s/ingushetiya_daily',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
