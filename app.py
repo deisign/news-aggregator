@@ -81,6 +81,17 @@ telegram_channels = [
     'https://t.me/bumba_bumba',
     'https://t.me/Kalmgame08',
     'https://t.me/s/ingushetiya_daily',
+    'https://t.me/golos_ingushetii',
+    'https://t.me/RIA_Ingushetia',
+    'https://t.me/su_skr06',
+    'https://t.me/vesti_ingush',
+    'https://t.me/ingushetia_official',
+    'https://t.me/d5U0OXuvYt8zM2Q6',
+   'https://t.me/vecheringushetiya',
+    'https://t.me/gazetaingush',
+    'https://t.me/segondya06',
+    'https://t.me/rozyskRI',
+    'https://t.me/ingsobranie',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
 ]
