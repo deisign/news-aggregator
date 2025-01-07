@@ -23,11 +23,9 @@ def fetch_rss_news(rss_feeds):
 # --- Списки источников ---
 rss_feeds = [
     # Калмыкия
-    'https://riakalm.ru/rss',
-    'https://kalmykia-news.net/rss',
-    'https://kalmtv.ru/rss',
-    'https://vesti-kalmykia.ru/rss',
-    'https://kalmykia-online.ru/rss',
+    
+    'https://kalmykia-news.net/rss/news',
+    'https://vesti-kalmykia.ru/feed/rss/news?format=feed',
     'http://halmgynn.ru/rss.xml',  # Новый источник
     # Ингушетия
     'https://fortanga.org/feed',
