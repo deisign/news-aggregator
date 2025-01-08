@@ -54,6 +54,7 @@ rss_feeds = [
 ]
 
 telegram_channels = [
+    'https://www.google.com/alerts/feeds/00257790936095162000/3411341543702573571'
     'https://t.me/kalmnovosti',
     'https://t.me/elistaorg',
     'https://t.me/s/riakalm',
@@ -94,6 +95,7 @@ telegram_channels = [
     'https://t.me/ingsobranie',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
+    'https://www.google.com/alerts/feeds/00257790936095162000/5968896030642642744'
 ]
 
 # --- Заголовок приложения ---
