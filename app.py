@@ -1,7 +1,10 @@
 import streamlit as st
 import feedparser
-import requests
-from bs4 import BeautifulSoup
+from telethon.sync import TelegramClient
+
+# --- Конфигурация Telegram API ---
+api_id = 20273444
+api_hash = 'a8585366cd62cd366d52ba03bc366508'
 
 # --- Функция для получения новостей из RSS ---
 def fetch_rss_news(rss_feeds):
@@ -21,24 +24,21 @@ def fetch_rss_news(rss_feeds):
             st.sidebar.warning(f"⚠️ {feed_url} - Нет данных")
     return news_list
 
-# --- Функция для получения данных из Telegram-каналов через веб-скрейпинг ---
-def fetch_telegram_messages(channels):
+# --- Функция для получения данных из Telegram-каналов ---
+def fetch_telegram_messages(client, channels):
     messages = []
-    for channel_url in channels:
+    for channel in channels:
         try:
-            response = requests.get(channel_url)
-            response.raise_for_status()  # Проверяем, что запрос успешен
-            soup = BeautifulSoup(response.text, 'html.parser')
-
-            # Извлекаем сообщения из HTML
-            message_blocks = soup.find_all('div', class_='tgme_widget_message_text')
-            for msg in message_blocks[:10]:  # Ограничиваемся первыми 10 сообщениями
-                messages.append({
-                    "channel": channel_url,
-                    "text": msg.text.strip()
-                })
+            entity = client.get_entity(channel)
+            for message in client.iter_messages(entity, limit=10):  # Получаем последние 10 сообщений
+                if message.message:
+                    messages.append({
+                        "channel": channel,
+                        "text": message.message.strip(),
+                        "date": message.date
+                    })
         except Exception as e:
-            st.sidebar.error(f"Ошибка при обработке {channel_url}: {e}")
+            st.sidebar.error(f"Ошибка при обработке {channel}: {e}")
     return messages
 
 # --- Списки источников ---
@@ -54,7 +54,6 @@ rss_feeds = [
 ]
 
 telegram_channels = [
-    'https://www.google.com/alerts/feeds/00257790936095162000/3411341543702573571'
     'https://t.me/kalmnovosti',
     'https://t.me/elistaorg',
     'https://t.me/s/riakalm',
@@ -88,27 +87,27 @@ telegram_channels = [
     'https://t.me/vesti_ingush',
     'https://t.me/ingushetia_official',
     'https://t.me/d5U0OXuvYt8zM2Q6',
-   'https://t.me/vecheringushetiya',
+    'https://t.me/vecheringushetiya',
     'https://t.me/gazetaingush',
     'https://t.me/segondya06',
     'https://t.me/rozyskRI',
     'https://t.me/ingsobranie',
     'https://t.me/s/themagastimes',
     'https://t.me/s/fortangaorg'
-    'https://www.google.com/alerts/feeds/00257790936095162000/5968896030642642744'
 ]
 
 # --- Заголовок приложения ---
 st.title("Агрегатор новостей Калмыкии и Ингушетии")
 st.sidebar.header("Фильтры")
 
-# --- Получение и отображение новостей из RSS ---
+# --- Получение новостей из RSS ---
 st.sidebar.subheader("Статус лент:")
 rss_news = fetch_rss_news(rss_feeds)
 
-# --- Получение и отображение новостей из Telegram ---
-st.sidebar.subheader("Telegram-каналы")
-telegram_news = fetch_telegram_messages(telegram_channels)
+# --- Получение новостей из Telegram ---
+with TelegramClient('session_name', api_id, api_hash) as client:
+    st.sidebar.subheader("Telegram-каналы")
+    telegram_news = fetch_telegram_messages(client, telegram_channels)
 
 # --- Фильтрация по источникам и ключевым словам ---
 sources = list(set([n['source'] for n in rss_news]))
@@ -140,12 +139,13 @@ st.subheader(f"Найдено новостей (Telegram): {len(filtered_telegra
 for item in filtered_telegram_news:
     st.markdown(f"**Канал:** [{item['channel']}]({item['channel']})")
     st.markdown(f"**Сообщение:** {item['text']}")
+    st.markdown(f"**Дата:** {item['date']}")
     st.write("---")
 
 # --- Информация о приложении ---
 st.sidebar.info(
     """
     Это приложение создано для агрегирования новостей из регионов Калмыкия и Ингушетия.
-    Источники: RSS-ленты и Telegram-каналы через веб-скрейпинг.
+    Источники: RSS-ленты и Telegram-каналы через Telegram API.
     """
 )
