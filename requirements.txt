@@ -5,4 +5,4 @@ streamlit==1.25.0
 feedparser==6.0.10
 telethon==1.29.0
 requests==2.31.0
-pillow
+pillow==9.5.0
